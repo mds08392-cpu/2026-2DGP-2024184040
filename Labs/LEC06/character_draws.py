@@ -24,7 +24,6 @@ def draw_bottom():
 def draw_left():
     for y in range(50, 551, 5):
         draw_character(50, y)
-    pass
 def move_circle():
     for degree in range(360):
         theta = math.radians(degree)
