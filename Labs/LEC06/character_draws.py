@@ -15,14 +15,14 @@ def draw_top():
     for x in range(50, 751, 5):
         draw_character(x, 550)
 def draw_right():
-    for y in range(550, 50, -5):
+    for y in range(551, 50, -5):
         draw_character(751, y)
     pass
 def draw_bottom():
     for x in range(751 , 50, -5):
         draw_character(x,50)
 def draw_left():
-    for y in range(50, 550, 5):
+    for y in range(50, 551, 5):
         draw_character(50, y)
     pass
 def move_circle():
@@ -36,7 +36,6 @@ def move_rectangle():
     draw_right()
     draw_bottom()
     draw_left()
-    pass
 
 def move_triangle():
     print("TRIANGLE")
