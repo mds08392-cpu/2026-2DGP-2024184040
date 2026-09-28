@@ -24,6 +24,10 @@ def draw_bottom():
 def draw_left():
     for y in range(50, 551, 5):
         draw_character(50, y)
+
+def drawSide(x , y):
+    pass
+
 def move_circle():
     for degree in range(360):
         theta = math.radians(degree)
@@ -37,7 +41,7 @@ def move_rectangle():
     draw_left()
 
 def move_triangle():
-    print("TRIANGLE")
+    drawSide
     pass
 
 while True:
