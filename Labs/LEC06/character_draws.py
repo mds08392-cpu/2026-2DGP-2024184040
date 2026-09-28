@@ -32,8 +32,9 @@ def drawSide(start,end, frame=50):
     x1, y1 = end
     for i in range(frame + 1):
         t = i / frame
-        x = x0 + (x1 - y0) * t
-        y = y0 + (y1 - y0) * t
+        x0 = x0 + (x1 - x0) * t
+        y0 = y0 + (y1 - y0) * t
+        draw_character(x0,y0)
 def move_circle():
     for degree in range(360):
         theta = math.radians(degree)
