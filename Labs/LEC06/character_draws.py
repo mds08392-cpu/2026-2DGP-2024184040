@@ -34,6 +34,7 @@ def move_circle():
         x = 400 + 200 * math.cos(theta)
         y = 300 + 200 * math.sin(theta)
         draw_character(x,y)
+
 def move_rectangle():
     draw_top()
     draw_right()
@@ -41,7 +42,10 @@ def move_rectangle():
     draw_left()
 
 def move_triangle():
-    drawSide
+    A = (100,100)
+    B = (700,100)
+    C = (400,500)
+    drawSide()
     pass
 
 while True:
