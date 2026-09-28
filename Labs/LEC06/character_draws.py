@@ -25,8 +25,18 @@ def draw_left():
     for y in range(50, 551, 5):
         draw_character(50, y)
 
-def drawSide(x , y):
-    pass
+def drawSide(start,end):
+    t = 0
+    x0 = start[0]
+    x1 = end[0]
+    y0 = start[1]
+    y1 = end[1]
+    while t <= 1:
+        x0 = x0 + (x1 - x0) * t
+        y0 = y0 + (y1 - y0) * t
+        t += 1 / 100
+        delay(0.01)
+        draw_character(x0,y0)
 
 def move_circle():
     for degree in range(360):
@@ -45,12 +55,12 @@ def move_triangle():
     A = (100,100)
     B = (700,100)
     C = (400,500)
-    drawSide()
+    drawSide(A,B)
     pass
 
 while True:
     #move_circle()
-    move_rectangle()
-    #move_triangle()
+    #move_rectangle()
+    move_triangle()
     pass
 close_canvas()
