@@ -27,7 +27,7 @@ def draw_left():
     for y in range(50, 551, 5):
         draw_character(50, y)
 
-def drawSide(start,end):
+def drawSide(start,end, frame=50):
     x0,y0 = start
     x1, y1 = end
 def move_circle():
