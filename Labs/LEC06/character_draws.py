@@ -28,17 +28,8 @@ def draw_left():
         draw_character(50, y)
 
 def drawSide(start,end):
-    t = 0
-    x0 = start[0]
-    x1 = end[0]
-    y0 = start[1]
-    y1 = end[1]
-    while t <= 1:
-        x0 = x0 + (x1 - x0) * t
-        y0 = y0 + (y1 - y0) * t
-        t += 1 / 100
-        draw_character(x0,y0)
-
+    x0,y0 = start
+    x1, y1 = end
 def move_circle():
     for degree in range(360):
         theta = math.radians(degree)
@@ -62,7 +53,7 @@ def move_triangle():
 
 while True:
     # move_circle()
-    move_rectangle()
-    # move_triangle()
+    # move_rectangle()
+    move_triangle()
 
 close_canvas()
