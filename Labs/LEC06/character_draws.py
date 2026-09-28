@@ -14,13 +14,13 @@ def draw_character(x, y):
 def draw_top():
     for x in range(50, 751, 5):
         draw_character(x, 550)
-    pass
 def draw_right():
     for y in range(550, 50, -5):
         draw_character(751, y)
     pass
 def draw_bottom():
-    pass
+    for x in range(751 , 50, -5):
+        draw_character(x,50)
 def draw_left():
     pass
 def move_circle():
