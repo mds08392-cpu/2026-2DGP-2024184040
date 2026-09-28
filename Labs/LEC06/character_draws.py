@@ -35,7 +35,6 @@ def drawSide(start,end):
         x0 = x0 + (x1 - x0) * t
         y0 = y0 + (y1 - y0) * t
         t += 1 / 100
-        delay(0.01)
         draw_character(x0,y0)
 
 def move_circle():
@@ -56,6 +55,7 @@ def move_triangle():
     B = (700,100)
     C = (400,500)
     drawSide(A,B)
+    drawSide(B,C)
     pass
 
 while True:
