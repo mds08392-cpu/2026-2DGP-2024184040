@@ -57,8 +57,8 @@ def move_triangle():
     drawSide(C,A)
 
 while True:
-    # move_circle()
-    # move_rectangle()
+    move_circle()
+    move_rectangle()
     move_triangle()
 
 close_canvas()
