@@ -22,6 +22,8 @@ def draw_bottom():
     for x in range(751 , 50, -5):
         draw_character(x,50)
 def draw_left():
+    for y in range(50, 550, 5):
+        draw_character(50, y)
     pass
 def move_circle():
     for degree in range(360):
@@ -29,11 +31,7 @@ def move_circle():
         x = 400 + 200 * math.cos(theta)
         y = 300 + 200 * math.sin(theta)
 
-        clear_canvas()
-        character.draw(x, y)
-        update_canvas()
-        delay(0.01)
-
+        draw_character(x,y)
 def move_rectangle():
     draw_top()
     draw_right()
@@ -48,7 +46,6 @@ def move_triangle():
 while True:
     #move_circle()
     move_rectangle()
-    move_triangle()
+    #move_triangle()
     pass
-
 close_canvas()
