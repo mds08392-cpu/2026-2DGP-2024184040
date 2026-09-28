@@ -10,6 +10,7 @@ def draw_character(x, y):
     character.draw(x, y)
     update_canvas()
     delay(0.01)
+
 def draw_top():
     for x in range(50, 751, 5):
         draw_character(x, 550)
@@ -21,7 +22,7 @@ def draw_right():
 def draw_bottom():
     for x in range(751 , 50, -5):
         draw_character(x,50)
-        
+
 def draw_left():
     for y in range(50, 551, 5):
         draw_character(50, y)
@@ -58,11 +59,10 @@ def move_triangle():
     drawSide(A,B)
     drawSide(B,C)
     drawSide(C,A)
-    pass
 
 while True:
-    #move_circle()
-    #move_rectangle()
-    move_triangle()
-    pass
+    move_circle()
+    # move_rectangle()
+    # move_triangle()
+
 close_canvas()
