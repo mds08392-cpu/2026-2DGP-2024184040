@@ -149,7 +149,7 @@ DIE_FRAMES = [
     (661, 7, 65, 17),
 ]
 DIE_CELL_W, DIE_CELL_H = 73, 49
-DIE_SCALE = 11
+DIE_SCALE = 16
 
 
 def die_frame_offset(frames, index):
