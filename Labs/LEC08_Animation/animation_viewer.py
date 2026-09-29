@@ -32,6 +32,31 @@ ATTACK_RIGHT_FRAMES = [
     (145, 49, 34, 22),
 ]
 
+ATTACK_CELL = 128  # 프레임이 원래 놓여 있던 칸 크기 (128x128)
+ATTACK_COLS = 16   # 한 줄에 16칸
+ATTACK_SHEET_H = 256
+
+
+def attack_frame_offset(index):
+    """프레임의 잘라낸 영역 중심이 원래 칸 중심에서 벗어난 정도(dx, dy)를 반환."""
+    x, y, w, h = ATTACK_RIGHT_FRAMES[index]
+    col, row = index % ATTACK_COLS, index // ATTACK_COLS
+    cell_cx = col * ATTACK_CELL + ATTACK_CELL / 2
+    cell_cy = ATTACK_SHEET_H - (row + 1) * ATTACK_CELL + ATTACK_CELL / 2  # pico2d y (아래 기준)
+    return x + w / 2 - cell_cx, y + h / 2 - cell_cy
+
+
+def draw_attack_right(index, cx, cy, scale):
+    """크기가 다른 프레임을 칸 기준 위치를 유지한 채 (cx, cy)에 그린다.
+    첫 프레임의 중심이 (cx, cy)에 오도록 기준점을 맞춘다."""
+    x, y, w, h = ATTACK_RIGHT_FRAMES[index]
+    ref_dx, ref_dy = attack_frame_offset(0)
+    dx, dy = attack_frame_offset(index)
+    hero_attack_right.clip_draw(x, y, w, h,
+                                cx + (dx - ref_dx) * scale, cy + (dy - ref_dy) * scale,
+                                w * scale, h * scale)
+
+
 # hero_walk_right / hero_walk_left: 256x49, 4프레임(각 64x49)
 WALK_FRAME_W, WALK_FRAME_H = 64, 49
 WALK_FRAME_COUNT = 4
