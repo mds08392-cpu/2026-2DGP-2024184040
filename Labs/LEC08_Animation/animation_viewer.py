@@ -9,12 +9,14 @@ hero_walk_right = load_image('hero_walk_right.png')
 hero_attack_left = load_image('hero_attack_left.png')
 hero_attack_right = load_image('hero_attack_right.png')
 
-# hero_walk_right: 256x49, 4프레임(각 64x49)
+# hero_walk_right / hero_walk_left: 256x49, 4프레임(각 64x49)
 WALK_FRAME_W, WALK_FRAME_H = 64, 49
 WALK_FRAME_COUNT = 4
 SCALE = 14
 
 LOOP_REPEAT = 5  # 애니메이션 반복 횟수 (반복 후 1초 정지)
+
+hero_walk = hero_walk_right  # 현재 재생 중인 시트
 
 running = True
 frame = 0
@@ -26,8 +28,8 @@ while running:
 
     clear_canvas()
     background.draw(400, 300)
-    hero_walk_right.clip_draw(frame * WALK_FRAME_W, 0, WALK_FRAME_W, WALK_FRAME_H,
-                              400, 300, WALK_FRAME_W * SCALE, WALK_FRAME_H * SCALE)
+    hero_walk.clip_draw(frame * WALK_FRAME_W, 0, WALK_FRAME_W, WALK_FRAME_H,
+                        400, 300, WALK_FRAME_W * SCALE, WALK_FRAME_H * SCALE)
     update_canvas()
 
     frame = (frame + 1) % WALK_FRAME_COUNT
@@ -36,6 +38,7 @@ while running:
         if loop_count == LOOP_REPEAT:
             loop_count = 0
             delay(1)
+            hero_walk = hero_walk_left if hero_walk is hero_walk_right else hero_walk_right
     delay(0.15)
 
 close_canvas()
