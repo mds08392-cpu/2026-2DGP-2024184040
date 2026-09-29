@@ -8,6 +8,8 @@ hero_walk_left = load_image('hero_walk_left.png')
 hero_walk_right = load_image('hero_walk_right.png')
 hero_attack_left = load_image('hero_attack_left.png')
 hero_attack_right = load_image('hero_attack_right.png')
+win_right = load_image('win_right.png')
+die = load_image('die.png')
 
 # hero_attack_right: 2048x256, 프레임마다 크기가 다름
 # (x, y, w, h) - clip_draw용 좌표 (y는 이미지 아래쪽 기준)
@@ -69,12 +71,12 @@ def attack_frame_offset(frames, index):
     return x + w / 2 - cell_cx, y + h / 2 - cell_cy
 
 
-def draw_attack(image, frames, index, cx, cy, scale):
+def draw_attack(image, frames, index, cx, cy, scale, offset_fn=attack_frame_offset):
     """크기가 다른 프레임을 칸 기준 위치를 유지한 채 (cx, cy)에 그린다.
     첫 프레임의 중심이 (cx, cy)에 오도록 기준점을 맞춘다."""
     x, y, w, h = frames[index]
-    ref_dx, ref_dy = attack_frame_offset(frames, 0)
-    dx, dy = attack_frame_offset(frames, index)
+    ref_dx, ref_dy = offset_fn(frames, 0)
+    dx, dy = offset_fn(frames, index)
     image.clip_draw(x, y, w, h,
                     cx + (dx - ref_dx) * scale, cy + (dy - ref_dy) * scale,
                     w * scale, h * scale)
@@ -84,12 +86,12 @@ def draw_attack(image, frames, index, cx, cy, scale):
 ATTACK_SCALE = 12
 
 
-def calc_attack_anchor(frames, scale):
+def calc_attack_anchor(frames, scale, offset_fn=attack_frame_offset):
     """전체 프레임이 차지하는 범위의 중앙이 캔버스 중앙에 오도록 기준점 (cx, cy)을 계산."""
-    ref_dx, ref_dy = attack_frame_offset(frames, 0)
+    ref_dx, ref_dy = offset_fn(frames, 0)
     left, right, bottom, top = 0, 0, 0, 0
     for i, (x, y, w, h) in enumerate(frames):
-        dx, dy = attack_frame_offset(frames, i)
+        dx, dy = offset_fn(frames, i)
         left = min(left, dx - ref_dx - w / 2)
         right = max(right, dx - ref_dx + w / 2)
         bottom = min(bottom, dy - ref_dy - h / 2)
@@ -118,6 +120,51 @@ def draw_walk_left(index):
                              400, 300, WALK_FRAME_W * SCALE, WALK_FRAME_H * SCALE)
 
 
+# win_right: 640x64, 10프레임(각 64x64)
+WIN_FRAME_W, WIN_FRAME_H = 64, 64
+WIN_FRAME_COUNT = 10
+WIN_SCALE = 16
+# 캐릭터가 칸 중앙에서 약간 치우쳐 있어서 화면 중앙에 오도록 보정 (칸 기준 x +2.5, y -4.5)
+WIN_CX = 400 - 2.5 * WIN_SCALE
+WIN_CY = 300 + 4.5 * WIN_SCALE
+
+
+def draw_win_right(index):
+    win_right.clip_draw(index * WIN_FRAME_W, 0, WIN_FRAME_W, WIN_FRAME_H,
+                        WIN_CX, WIN_CY, WIN_FRAME_W * WIN_SCALE, WIN_FRAME_H * WIN_SCALE)
+
+
+# die: 730x49, 73x49 칸 10개, 프레임마다 크기가 다름
+# (x, y, w, h) - clip_draw용 좌표 (y는 이미지 아래쪽 기준)
+DIE_FRAMES = [
+    (30, 8, 24, 26),
+    (90, 9, 41, 24),
+    (157, 8, 55, 21),
+    (224, 8, 63, 16),
+    (296, 7, 67, 17),
+    (369, 7, 66, 17),
+    (442, 7, 66, 17),
+    (515, 7, 64, 17),
+    (588, 7, 65, 17),
+    (661, 7, 65, 17),
+]
+DIE_CELL_W, DIE_CELL_H = 73, 49
+DIE_SCALE = 11
+
+
+def die_frame_offset(frames, index):
+    """die 프레임의 잘라낸 영역 중심이 원래 칸 중심에서 벗어난 정도(dx, dy)를 반환."""
+    x, y, w, h = frames[index]
+    return x + w / 2 - (index * DIE_CELL_W + DIE_CELL_W / 2), y + h / 2 - DIE_CELL_H / 2
+
+
+DIE_CX, DIE_CY = calc_attack_anchor(DIE_FRAMES, DIE_SCALE, die_frame_offset)
+
+
+def draw_die(index):
+    draw_attack(die, DIE_FRAMES, index, DIE_CX, DIE_CY, DIE_SCALE, die_frame_offset)
+
+
 def draw_attack_right(index):
     draw_attack(hero_attack_right, ATTACK_RIGHT_FRAMES, index,
                 ATTACK_RIGHT_CX, ATTACK_RIGHT_CY, ATTACK_SCALE)
@@ -134,6 +181,8 @@ motions = [
     (WALK_FRAME_COUNT, draw_walk_left, 0.15),
     (len(ATTACK_RIGHT_FRAMES), draw_attack_right, 0.1),
     (len(ATTACK_LEFT_FRAMES), draw_attack_left, 0.1),
+    (WIN_FRAME_COUNT, draw_win_right, 0.12),
+    (len(DIE_FRAMES), draw_die, 0.12),
 ]
 
 running = True
