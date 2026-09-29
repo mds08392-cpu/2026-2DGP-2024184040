@@ -118,6 +118,11 @@ def draw_walk_left(index):
                              400, 300, WALK_FRAME_W * SCALE, WALK_FRAME_H * SCALE)
 
 
+def draw_attack_right(index):
+    draw_attack(hero_attack_right, ATTACK_RIGHT_FRAMES, index,
+                ATTACK_RIGHT_CX, ATTACK_RIGHT_CY, ATTACK_SCALE)
+
+
 def draw_attack_left(index):
     draw_attack(hero_attack_left, ATTACK_LEFT_FRAMES, index,
                 ATTACK_LEFT_CX, ATTACK_LEFT_CY, ATTACK_SCALE)
@@ -127,6 +132,7 @@ def draw_attack_left(index):
 motions = [
     (WALK_FRAME_COUNT, draw_walk_right, 0.15),
     (WALK_FRAME_COUNT, draw_walk_left, 0.15),
+    (len(ATTACK_RIGHT_FRAMES), draw_attack_right, 0.1),
     (len(ATTACK_LEFT_FRAMES), draw_attack_left, 0.1),
 ]
 
