@@ -57,6 +57,25 @@ def draw_attack_right(index, cx, cy, scale):
                                 w * scale, h * scale)
 
 
+# 모든 공격 프레임이 캔버스(800x600) 안에 들어오도록 배율과 기준점을 정한다.
+ATTACK_SCALE = 8
+
+
+def calc_attack_anchor(scale):
+    """전체 프레임이 차지하는 범위의 중앙이 캔버스 중앙에 오도록 기준점 (cx, cy)을 계산."""
+    ref_dx, ref_dy = attack_frame_offset(0)
+    left, right, bottom, top = 0, 0, 0, 0
+    for i, (x, y, w, h) in enumerate(ATTACK_RIGHT_FRAMES):
+        dx, dy = attack_frame_offset(i)
+        left = min(left, dx - ref_dx - w / 2)
+        right = max(right, dx - ref_dx + w / 2)
+        bottom = min(bottom, dy - ref_dy - h / 2)
+        top = max(top, dy - ref_dy + h / 2)
+    return 400 - (left + right) / 2 * scale, 300 - (bottom + top) / 2 * scale
+
+
+ATTACK_CX, ATTACK_CY = calc_attack_anchor(ATTACK_SCALE)
+
 # hero_walk_right / hero_walk_left: 256x49, 4프레임(각 64x49)
 WALK_FRAME_W, WALK_FRAME_H = 64, 49
 WALK_FRAME_COUNT = 4
@@ -66,7 +85,23 @@ LOOP_REPEAT = 5  # 애니메이션 반복 횟수 (반복 후 1초 정지)
 
 hero_walk = hero_walk_right  # 현재 재생 중인 시트
 
+# --- hero_attack_right 단독 확인용 루프 (ESC/창 닫기로 종료하면 걷기 루프는 건너뜀) ---
 running = True
+attack_frame = 0
+while running:
+    for event in get_events():
+        if event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
+            running = False
+
+    clear_canvas()
+    background.draw(400, 300)
+    draw_attack_right(attack_frame, ATTACK_CX, ATTACK_CY, ATTACK_SCALE)
+    update_canvas()
+
+    attack_frame = (attack_frame + 1) % len(ATTACK_RIGHT_FRAMES)
+    delay(0.1)
+
+# --- 걷기 루프 ---
 frame = 0
 loop_count = 0
 while running:
