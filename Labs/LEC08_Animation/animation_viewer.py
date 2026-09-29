@@ -107,58 +107,31 @@ SCALE = 18
 
 LOOP_REPEAT = 5  # 애니메이션 반복 횟수 (반복 후 1초 정지)
 
-hero_walk = hero_walk_right  # 현재 재생 중인 시트
+
+def draw_walk_right(index):
+    hero_walk_right.clip_draw(index * WALK_FRAME_W, 0, WALK_FRAME_W, WALK_FRAME_H,
+                              400, 300, WALK_FRAME_W * SCALE, WALK_FRAME_H * SCALE)
+
+
+def draw_walk_left(index):
+    hero_walk_left.clip_draw(index * WALK_FRAME_W, 0, WALK_FRAME_W, WALK_FRAME_H,
+                             400, 300, WALK_FRAME_W * SCALE, WALK_FRAME_H * SCALE)
+
+
+def draw_attack_left(index):
+    draw_attack(hero_attack_left, ATTACK_LEFT_FRAMES, index,
+                ATTACK_LEFT_CX, ATTACK_LEFT_CY, ATTACK_SCALE)
+
+
+# 재생할 모션 순서: (프레임 수, 그리기 함수, 프레임 간격(초))
+motions = [
+    (WALK_FRAME_COUNT, draw_walk_right, 0.15),
+    (WALK_FRAME_COUNT, draw_walk_left, 0.15),
+    (len(ATTACK_LEFT_FRAMES), draw_attack_left, 0.1),
+]
 
 running = True
-
-# 공격 모션 단독 확인용 (True로 바꾸면 공격 루프를 먼저 실행하고, 종료하면 걷기 루프는 건너뜀)
-TEST_ATTACK = False
-
-if TEST_ATTACK:
-    attack_left_frame = 0
-    attack_left_loop_count = 0
-    while running:
-        for event in get_events():
-            if event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
-                running = False
-
-        clear_canvas()
-        background.draw(400, 300)
-        draw_attack(hero_attack_left, ATTACK_LEFT_FRAMES, attack_left_frame,
-                    ATTACK_LEFT_CX, ATTACK_LEFT_CY, ATTACK_SCALE)
-        update_canvas()
-
-        attack_left_frame = (attack_left_frame + 1) % len(ATTACK_LEFT_FRAMES)
-        if attack_left_frame == 0:
-            attack_left_loop_count += 1
-            if attack_left_loop_count == LOOP_REPEAT:
-                attack_left_loop_count = 0
-                delay(1)
-        delay(0.1)
-
-    # --- hero_attack_right 단독 확인용 루프 (ESC/창 닫기로 종료하면 걷기 루프는 건너뜀) ---
-    attack_frame = 0
-    attack_loop_count = 0
-    while running:
-        for event in get_events():
-            if event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
-                running = False
-
-        clear_canvas()
-        background.draw(400, 300)
-        draw_attack(hero_attack_right, ATTACK_RIGHT_FRAMES, attack_frame,
-                    ATTACK_RIGHT_CX, ATTACK_RIGHT_CY, ATTACK_SCALE)
-        update_canvas()
-
-        attack_frame = (attack_frame + 1) % len(ATTACK_RIGHT_FRAMES)
-        if attack_frame == 0:
-            attack_loop_count += 1
-            if attack_loop_count == LOOP_REPEAT:
-                attack_loop_count = 0
-                delay(1)
-        delay(0.1)
-
-# --- 걷기 루프 ---
+motion_index = 0
 frame = 0
 loop_count = 0
 while running:
@@ -166,19 +139,20 @@ while running:
         if event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
             running = False
 
+    frame_count, draw_motion, frame_delay = motions[motion_index]
+
     clear_canvas()
     background.draw(400, 300)
-    hero_walk.clip_draw(frame * WALK_FRAME_W, 0, WALK_FRAME_W, WALK_FRAME_H,
-                        400, 300, WALK_FRAME_W * SCALE, WALK_FRAME_H * SCALE)
+    draw_motion(frame)
     update_canvas()
 
-    frame = (frame + 1) % WALK_FRAME_COUNT
+    frame = (frame + 1) % frame_count
     if frame == 0:
         loop_count += 1
         if loop_count == LOOP_REPEAT:
             loop_count = 0
             delay(1)
-            hero_walk = hero_walk_left if hero_walk is hero_walk_right else hero_walk_right
-    delay(0.15)
+            motion_index = (motion_index + 1) % len(motions)
+    delay(frame_delay)
 
 close_canvas()
