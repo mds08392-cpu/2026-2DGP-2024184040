@@ -98,6 +98,7 @@ def calc_attack_anchor(frames, scale):
 
 
 ATTACK_RIGHT_CX, ATTACK_RIGHT_CY = calc_attack_anchor(ATTACK_RIGHT_FRAMES, ATTACK_SCALE)
+ATTACK_LEFT_CX, ATTACK_LEFT_CY = calc_attack_anchor(ATTACK_LEFT_FRAMES, ATTACK_SCALE)
 
 # hero_walk_right / hero_walk_left: 256x49, 4프레임(각 64x49)
 WALK_FRAME_W, WALK_FRAME_H = 64, 49
