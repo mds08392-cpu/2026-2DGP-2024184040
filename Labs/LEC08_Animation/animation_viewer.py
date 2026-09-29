@@ -88,6 +88,7 @@ hero_walk = hero_walk_right  # 현재 재생 중인 시트
 # --- hero_attack_right 단독 확인용 루프 (ESC/창 닫기로 종료하면 걷기 루프는 건너뜀) ---
 running = True
 attack_frame = 0
+attack_loop_count = 0
 while running:
     for event in get_events():
         if event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
@@ -99,6 +100,11 @@ while running:
     update_canvas()
 
     attack_frame = (attack_frame + 1) % len(ATTACK_RIGHT_FRAMES)
+    if attack_frame == 0:
+        attack_loop_count += 1
+        if attack_loop_count == LOOP_REPEAT:
+            attack_loop_count = 0
+            delay(1)
     delay(0.1)
 
 # --- 걷기 루프 ---
