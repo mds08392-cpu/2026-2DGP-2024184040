@@ -12,10 +12,13 @@ hero_attack_right = load_image('hero_attack_right.png')
 # hero_walk_right: 256x49, 4프레임(각 64x49)
 WALK_FRAME_W, WALK_FRAME_H = 64, 49
 WALK_FRAME_COUNT = 4
-SCALE = 6
+SCALE = 14
+
+LOOP_REPEAT = 5  # 애니메이션 반복 횟수 (반복 후 1초 정지)
 
 running = True
 frame = 0
+loop_count = 0
 while running:
     for event in get_events():
         if event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
@@ -28,6 +31,11 @@ while running:
     update_canvas()
 
     frame = (frame + 1) % WALK_FRAME_COUNT
+    if frame == 0:
+        loop_count += 1
+        if loop_count == LOOP_REPEAT:
+            loop_count = 0
+            delay(1)
     delay(0.15)
 
 close_canvas()
