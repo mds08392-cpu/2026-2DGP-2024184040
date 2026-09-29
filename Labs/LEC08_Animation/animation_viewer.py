@@ -81,7 +81,7 @@ def draw_attack(image, frames, index, cx, cy, scale):
 
 
 # 모든 공격 프레임이 캔버스(800x600) 안에 들어오도록 배율과 기준점을 정한다.
-ATTACK_SCALE = 8
+ATTACK_SCALE = 12
 
 
 def calc_attack_anchor(frames, scale):
@@ -103,7 +103,7 @@ ATTACK_LEFT_CX, ATTACK_LEFT_CY = calc_attack_anchor(ATTACK_LEFT_FRAMES, ATTACK_S
 # hero_walk_right / hero_walk_left: 256x49, 4프레임(각 64x49)
 WALK_FRAME_W, WALK_FRAME_H = 64, 49
 WALK_FRAME_COUNT = 4
-SCALE = 14
+SCALE = 18
 
 LOOP_REPEAT = 5  # 애니메이션 반복 횟수 (반복 후 1초 정지)
 
