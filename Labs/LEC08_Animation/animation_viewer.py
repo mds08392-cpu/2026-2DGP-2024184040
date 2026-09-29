@@ -60,36 +60,36 @@ ATTACK_COLS = 16   # 한 줄에 16칸
 ATTACK_SHEET_H = 256
 
 
-def attack_frame_offset(index):
+def attack_frame_offset(frames, index):
     """프레임의 잘라낸 영역 중심이 원래 칸 중심에서 벗어난 정도(dx, dy)를 반환."""
-    x, y, w, h = ATTACK_RIGHT_FRAMES[index]
+    x, y, w, h = frames[index]
     col, row = index % ATTACK_COLS, index // ATTACK_COLS
     cell_cx = col * ATTACK_CELL + ATTACK_CELL / 2
     cell_cy = ATTACK_SHEET_H - (row + 1) * ATTACK_CELL + ATTACK_CELL / 2  # pico2d y (아래 기준)
     return x + w / 2 - cell_cx, y + h / 2 - cell_cy
 
 
-def draw_attack_right(index, cx, cy, scale):
+def draw_attack(image, frames, index, cx, cy, scale):
     """크기가 다른 프레임을 칸 기준 위치를 유지한 채 (cx, cy)에 그린다.
     첫 프레임의 중심이 (cx, cy)에 오도록 기준점을 맞춘다."""
-    x, y, w, h = ATTACK_RIGHT_FRAMES[index]
-    ref_dx, ref_dy = attack_frame_offset(0)
-    dx, dy = attack_frame_offset(index)
-    hero_attack_right.clip_draw(x, y, w, h,
-                                cx + (dx - ref_dx) * scale, cy + (dy - ref_dy) * scale,
-                                w * scale, h * scale)
+    x, y, w, h = frames[index]
+    ref_dx, ref_dy = attack_frame_offset(frames, 0)
+    dx, dy = attack_frame_offset(frames, index)
+    image.clip_draw(x, y, w, h,
+                    cx + (dx - ref_dx) * scale, cy + (dy - ref_dy) * scale,
+                    w * scale, h * scale)
 
 
 # 모든 공격 프레임이 캔버스(800x600) 안에 들어오도록 배율과 기준점을 정한다.
 ATTACK_SCALE = 8
 
 
-def calc_attack_anchor(scale):
+def calc_attack_anchor(frames, scale):
     """전체 프레임이 차지하는 범위의 중앙이 캔버스 중앙에 오도록 기준점 (cx, cy)을 계산."""
-    ref_dx, ref_dy = attack_frame_offset(0)
+    ref_dx, ref_dy = attack_frame_offset(frames, 0)
     left, right, bottom, top = 0, 0, 0, 0
-    for i, (x, y, w, h) in enumerate(ATTACK_RIGHT_FRAMES):
-        dx, dy = attack_frame_offset(i)
+    for i, (x, y, w, h) in enumerate(frames):
+        dx, dy = attack_frame_offset(frames, i)
         left = min(left, dx - ref_dx - w / 2)
         right = max(right, dx - ref_dx + w / 2)
         bottom = min(bottom, dy - ref_dy - h / 2)
@@ -97,7 +97,7 @@ def calc_attack_anchor(scale):
     return 400 - (left + right) / 2 * scale, 300 - (bottom + top) / 2 * scale
 
 
-ATTACK_CX, ATTACK_CY = calc_attack_anchor(ATTACK_SCALE)
+ATTACK_RIGHT_CX, ATTACK_RIGHT_CY = calc_attack_anchor(ATTACK_RIGHT_FRAMES, ATTACK_SCALE)
 
 # hero_walk_right / hero_walk_left: 256x49, 4프레임(각 64x49)
 WALK_FRAME_W, WALK_FRAME_H = 64, 49
@@ -119,7 +119,8 @@ while running:
 
     clear_canvas()
     background.draw(400, 300)
-    draw_attack_right(attack_frame, ATTACK_CX, ATTACK_CY, ATTACK_SCALE)
+    draw_attack(hero_attack_right, ATTACK_RIGHT_FRAMES, attack_frame,
+                ATTACK_RIGHT_CX, ATTACK_RIGHT_CY, ATTACK_SCALE)
     update_canvas()
 
     attack_frame = (attack_frame + 1) % len(ATTACK_RIGHT_FRAMES)
