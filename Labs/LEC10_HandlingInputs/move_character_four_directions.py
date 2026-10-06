@@ -13,6 +13,7 @@ ROW_IDLE_LEFT = 200
 ROW_RUN_RIGHT = 100
 ROW_RUN_LEFT = 0
 FRAME_DELAY = 0.05  # 프레임 간격(초)
+SPEED = 10  # 한 프레임당 이동 거리(픽셀)
 
 running = True
 x, y = 640, 512  # 캐릭터 위치
@@ -55,6 +56,7 @@ while running:
     update_canvas()
 
     handle_events()
+    x += dir_x * SPEED
     frame = (frame + 1) % FRAME_COUNT
     delay(FRAME_DELAY)
 
