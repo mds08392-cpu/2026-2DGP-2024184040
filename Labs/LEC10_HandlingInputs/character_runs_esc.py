@@ -22,7 +22,9 @@ for x in range(0, 800, 5):
     character.clip_draw(frame * 100, 100, 100, 100, x, 90)
     update_canvas()
 
-    # fill here
+    handle_events()
+    if not running:
+        break
 
 
 
