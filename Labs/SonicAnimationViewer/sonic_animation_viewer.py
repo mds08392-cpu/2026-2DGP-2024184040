@@ -90,6 +90,13 @@ HURT_FRAMES = [
 ]
 
 
+# 동작 10: 달리기 변형 (8프레임)
+RUN2_FRAMES = [
+    (1, 108, 27, 38), (31, 110, 31, 36), (64, 110, 31, 36), (99, 110, 33, 38),
+    (136, 110, 32, 36), (176, 110, 33, 36), (217, 110, 33, 36), (254, 111, 33, 36),
+]
+
+
 # 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
 MOTIONS = [
     ('idle', IDLE_FRAMES, 0.1),
@@ -101,6 +108,7 @@ MOTIONS = [
     ('swirl', SWIRL_FRAMES, 0.08),
     ('turn', TURN_FRAMES, 0.12),
     ('hurt', HURT_FRAMES, 0.15),
+    ('run2', RUN2_FRAMES, 0.08),
 ]
 
 for name, frames, frame_delay in MOTIONS:
