@@ -17,16 +17,26 @@ FRAME_DELAY = 0.05  # 프레임 간격(초)
 running = True
 x, y = 640, 512  # 캐릭터 위치
 frame = 0
+dir_x, dir_y = 0, 0  # 방향키로 정해지는 이동 방향 (-1, 0, 1)
 
 
 def handle_events():
-    global running
+    global running, dir_x, dir_y
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             running = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
+        elif event.type == SDL_KEYDOWN:
+            if event.key == SDLK_ESCAPE:
+                running = False
+            elif event.key == SDLK_RIGHT:
+                dir_x += 1
+            elif event.key == SDLK_LEFT:
+                dir_x -= 1
+            elif event.key == SDLK_UP:
+                dir_y += 1
+            elif event.key == SDLK_DOWN:
+                dir_y -= 1
 
 
 while running:
