@@ -12,6 +12,7 @@ ROW_IDLE_RIGHT = 300
 ROW_IDLE_LEFT = 200
 ROW_RUN_RIGHT = 100
 ROW_RUN_LEFT = 0
+FRAME_DELAY = 0.05  # 프레임 간격(초)
 
 running = True
 x, y = 640, 512  # 캐릭터 위치
@@ -36,6 +37,6 @@ while running:
 
     handle_events()
     frame = (frame + 1) % FRAME_COUNT
-    delay(0.05)
+    delay(FRAME_DELAY)
 
 close_canvas()
