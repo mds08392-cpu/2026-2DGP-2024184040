@@ -5,6 +5,14 @@ open_canvas(1280, 1024)
 background = load_image('TUK_GROUND.png')
 character = load_image('animation_sheet.png')
 
+# animation_sheet.png: 칸 100 x 100, 한 행에 8프레임 (y는 이미지 아래쪽 기준)
+CELL = 100
+FRAME_COUNT = 8
+ROW_IDLE_RIGHT = 300
+ROW_IDLE_LEFT = 200
+ROW_RUN_RIGHT = 100
+ROW_RUN_LEFT = 0
+
 running = True
 
 
