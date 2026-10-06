@@ -103,6 +103,12 @@ CHEER_FRAMES = [
 ]
 
 
+# 동작 12: 대기 (2프레임)
+WAIT_FRAMES = [
+    (96, 59, 23, 39), (125, 59, 23, 39),
+]
+
+
 # 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
 MOTIONS = [
     ('idle', IDLE_FRAMES, 0.1),
@@ -116,6 +122,7 @@ MOTIONS = [
     ('hurt', HURT_FRAMES, 0.15),
     ('run2', RUN2_FRAMES, 0.08),
     ('cheer', CHEER_FRAMES, 0.2),
+    ('wait', WAIT_FRAMES, 0.25),
 ]
 
 for name, frames, frame_delay in MOTIONS:
