@@ -41,10 +41,18 @@ RUN_FRAMES = [
 ]
 
 
+# 동작 3: 대시 (6프레임)
+DASH_FRAMES = [
+    (1, 361, 33, 40), (39, 362, 35, 39), (89, 362, 35, 38), (130, 362, 34, 42),
+    (181, 362, 34, 41), (228, 363, 33, 40),
+]
+
+
 # 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
 MOTIONS = [
     ('idle', IDLE_FRAMES, 0.1),
     ('run', RUN_FRAMES, 0.08),
+    ('dash', DASH_FRAMES, 0.1),
 ]
 
 for name, frames, frame_delay in MOTIONS:
