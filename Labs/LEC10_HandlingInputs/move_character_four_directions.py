@@ -15,6 +15,7 @@ ROW_RUN_LEFT = 0
 
 running = True
 x, y = 640, 512  # 캐릭터 위치
+frame = 0
 
 
 def handle_events():
@@ -30,10 +31,11 @@ def handle_events():
 while running:
     clear_canvas()
     background.draw(640, 512)
-    character.clip_draw(0, ROW_IDLE_RIGHT, CELL, CELL, x, y)
+    character.clip_draw(frame * CELL, ROW_IDLE_RIGHT, CELL, CELL, x, y)
     update_canvas()
 
     handle_events()
+    frame = (frame + 1) % FRAME_COUNT
     delay(0.05)
 
 close_canvas()
