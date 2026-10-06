@@ -14,6 +14,7 @@ ROW_RUN_RIGHT = 100
 ROW_RUN_LEFT = 0
 FRAME_DELAY = 0.05  # 프레임 간격(초)
 SPEED = 10  # 한 프레임당 이동 거리(픽셀)
+CANVAS_W, CANVAS_H = 1280, 1024
 
 running = True
 x, y = 640, 512  # 캐릭터 위치
@@ -65,6 +66,7 @@ while running:
         face_dir = dir_x  # 좌우로 움직일 때만 바라보는 방향이 바뀐다
     x += dir_x * SPEED
     y += dir_y * SPEED
+    x = max(CELL // 2, min(x, CANVAS_W - CELL // 2))  # 좌우 경계에서 멈춤
     frame = (frame + 1) % FRAME_COUNT
     delay(FRAME_DELAY)
 
