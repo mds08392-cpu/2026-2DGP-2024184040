@@ -128,14 +128,24 @@ MOTIONS = [
 LOOP_REPEAT = 5  # 동작별 반복 횟수
 PAUSE_TIME = 1   # 반복이 끝난 뒤 정지 시간(초)
 
-for name, frames, frame_delay in MOTIONS:
-    base_y = calc_base_y(frames)
-    for loop in range(LOOP_REPEAT):
-        for index in range(len(frames)):
-            clear_canvas()
-            draw_frame(frames, index, 400, base_y)
-            update_canvas()
-            delay(frame_delay)
-    delay(PAUSE_TIME)
+motion_index = 0
+frame = 0
+loop_count = 0
+running = True
+while running and motion_index < len(MOTIONS):
+    name, frames, frame_delay = MOTIONS[motion_index]
+
+    clear_canvas()
+    draw_frame(frames, frame, 400, calc_base_y(frames))
+    update_canvas()
+
+    frame = (frame + 1) % len(frames)
+    if frame == 0:
+        loop_count += 1
+        if loop_count == LOOP_REPEAT:
+            loop_count = 0
+            delay(PAUSE_TIME)
+            motion_index += 1  # 다음 동작으로 전환
+    delay(frame_delay)
 
 close_canvas()
