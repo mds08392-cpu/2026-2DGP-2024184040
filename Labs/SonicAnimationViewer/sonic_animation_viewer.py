@@ -109,34 +109,45 @@ WAIT_FRAMES = [
 ]
 
 
-# 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
+# 동작 목록: (이름, 프레임 목록, 프레임 간격(초), 이동 속도(픽셀/초, 0이면 제자리))
 MOTIONS = [
-    ('idle', IDLE_FRAMES, 0.1),
-    ('run', RUN_FRAMES, 0.08),
-    ('dash', DASH_FRAMES, 0.1),
-    ('spin', SPIN_FRAMES, 0.06),
-    ('squash', SQUASH_FRAMES, 0.08),
-    ('peel', PEEL_FRAMES, 0.08),
-    ('swirl', SWIRL_FRAMES, 0.08),
-    ('turn', TURN_FRAMES, 0.12),
-    ('hurt', HURT_FRAMES, 0.15),
-    ('run2', RUN2_FRAMES, 0.08),
-    ('cheer', CHEER_FRAMES, 0.2),
-    ('wait', WAIT_FRAMES, 0.25),
+    ('idle', IDLE_FRAMES, 0.1, 0),
+    ('run', RUN_FRAMES, 0.08, 115),
+    ('dash', DASH_FRAMES, 0.1, 180),
+    ('spin', SPIN_FRAMES, 0.06, 200),
+    ('squash', SQUASH_FRAMES, 0.08, 0),
+    ('peel', PEEL_FRAMES, 0.08, 225),
+    ('swirl', SWIRL_FRAMES, 0.08, 225),
+    ('turn', TURN_FRAMES, 0.12, 0),
+    ('hurt', HURT_FRAMES, 0.15, 0),
+    ('run2', RUN2_FRAMES, 0.08, 165),
+    ('cheer', CHEER_FRAMES, 0.2, 0),
+    ('wait', WAIT_FRAMES, 0.25, 0),
 ]
 
 LOOP_REPEAT = 5  # 동작별 반복 횟수
 PAUSE_TIME = 1   # 반복이 끝난 뒤 정지 시간(초)
+START_X = 120    # 이동 동작이 시작하는 x 좌표
+MAX_X = 680      # 이동해도 넘지 않는 x 좌표 (캔버스 안에 머물게 한다)
+CENTER_X = 400   # 제자리 동작의 x 좌표
 
 motion_index = 0
 frame = 0
 loop_count = 0
+x = START_X
+last_time = get_time()
 running = True
 while running:
-    name, frames, frame_delay = MOTIONS[motion_index]
+    name, frames, frame_delay, speed = MOTIONS[motion_index]
+
+    # 이동 동작은 애니메이션과 동시에 오른쪽으로 이동한다.
+    now = get_time()
+    if speed > 0:
+        x = min(x + speed * (now - last_time), MAX_X)
+    last_time = now
 
     clear_canvas()
-    draw_frame(frames, frame, 400, calc_base_y(frames))
+    draw_frame(frames, frame, x if speed > 0 else CENTER_X, calc_base_y(frames))
     update_canvas()
 
     frame = (frame + 1) % len(frames)
@@ -146,6 +157,8 @@ while running:
             loop_count = 0
             delay(PAUSE_TIME)
             motion_index = (motion_index + 1) % len(MOTIONS)  # 마지막 뒤에는 처음으로
+            x = START_X  # 다음 동작은 시작 위치에서 시작
+            last_time = get_time()
     delay(frame_delay)
 
 close_canvas()
