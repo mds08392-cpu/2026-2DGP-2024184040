@@ -77,6 +77,13 @@ SWIRL_FRAMES = [
 ]
 
 
+# 동작 8: 몸 돌리기 (6프레임)
+TURN_FRAMES = [
+    (1, 154, 24, 45), (31, 154, 29, 44), (65, 154, 20, 44), (90, 155, 25, 43),
+    (119, 155, 25, 43), (149, 154, 20, 44),
+]
+
+
 # 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
 MOTIONS = [
     ('idle', IDLE_FRAMES, 0.1),
@@ -86,6 +93,7 @@ MOTIONS = [
     ('squash', SQUASH_FRAMES, 0.08),
     ('peel', PEEL_FRAMES, 0.08),
     ('swirl', SWIRL_FRAMES, 0.08),
+    ('turn', TURN_FRAMES, 0.12),
 ]
 
 for name, frames, frame_delay in MOTIONS:
