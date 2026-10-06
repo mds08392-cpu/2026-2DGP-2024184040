@@ -56,12 +56,20 @@ SPIN_FRAMES = [
 ]
 
 
+# 동작 5: 납작한 공 (6프레임)
+SQUASH_FRAMES = [
+    (1, 292, 30, 27), (36, 292, 29, 27), (70, 292, 29, 27), (105, 292, 29, 27),
+    (139, 292, 29, 27), (174, 292, 29, 27),
+]
+
+
 # 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
 MOTIONS = [
     ('idle', IDLE_FRAMES, 0.1),
     ('run', RUN_FRAMES, 0.08),
     ('dash', DASH_FRAMES, 0.1),
     ('spin', SPIN_FRAMES, 0.06),
+    ('squash', SQUASH_FRAMES, 0.08),
 ]
 
 for name, frames, frame_delay in MOTIONS:
