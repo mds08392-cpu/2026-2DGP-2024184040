@@ -67,6 +67,7 @@ while running:
     x += dir_x * SPEED
     y += dir_y * SPEED
     x = max(CELL // 2, min(x, CANVAS_W - CELL // 2))  # 좌우 경계에서 멈춤
+    y = max(CELL // 2, min(y, CANVAS_H - CELL // 2))  # 상하 경계에서 멈춤
     frame = (frame + 1) % FRAME_COUNT
     delay(FRAME_DELAY)
 
