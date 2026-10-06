@@ -7,6 +7,7 @@ SCALE = 4  # 원본 크기의 4배
 sheet = load_image('sonic-sprite.png')  # 399 x 525
 
 # 프레임 좌표: (x, y, w, h) - clip_draw용 (y는 이미지 아래쪽 기준)
+# 동작마다 프레임 목록을 상수로 둔다.
 IDLE_FRAMES = [
     (1, 447, 29, 39), (31, 447, 26, 38), (58, 447, 29, 39), (87, 447, 29, 38),
     (118, 447, 30, 38), (150, 447, 30, 38), (182, 447, 29, 38), (211, 448, 29, 38),
@@ -32,14 +33,17 @@ def calc_base_y(frames):
     return 300 - (top - bottom) / 2 * SCALE
 
 
-IDLE_BASE_Y = calc_base_y(IDLE_FRAMES)
+# 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
+MOTIONS = [
+    ('idle', IDLE_FRAMES, 0.1),
+]
 
-frame = 0
-for _ in range(33):
-    clear_canvas()
-    draw_frame(IDLE_FRAMES, frame, 400, IDLE_BASE_Y)
-    update_canvas()
-    frame = (frame + 1) % len(IDLE_FRAMES)
-    delay(0.1)
+for name, frames, frame_delay in MOTIONS:
+    base_y = calc_base_y(frames)
+    for index in range(len(frames)):
+        clear_canvas()
+        draw_frame(frames, index, 400, base_y)
+        update_canvas()
+        delay(frame_delay)
 
 close_canvas()
