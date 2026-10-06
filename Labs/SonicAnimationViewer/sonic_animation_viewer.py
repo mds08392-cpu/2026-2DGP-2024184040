@@ -2,6 +2,8 @@ from pico2d import *
 
 open_canvas()
 
+SCALE = 4  # 원본 크기의 4배
+
 sheet = load_image('sonic-sprite.png')  # 399 x 525
 
 # 프레임 좌표: (x, y, w, h) - clip_draw용 (y는 이미지 아래쪽 기준)
@@ -15,7 +17,7 @@ frame = 0
 for _ in range(33):
     clear_canvas()
     x, y, w, h = IDLE_FRAMES[frame]
-    sheet.clip_draw(x, y, w, h, 400, 300)
+    sheet.clip_draw(x, y, w, h, 400, 300, w * SCALE, h * SCALE)
     update_canvas()
     frame = (frame + 1) % len(IDLE_FRAMES)
     delay(0.1)
