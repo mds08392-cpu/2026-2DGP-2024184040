@@ -56,7 +56,7 @@ while running:
     if dir_x != 0 or dir_y != 0:
         row = ROW_RUN_RIGHT if face_dir > 0 else ROW_RUN_LEFT  # 이동 중에는 이동 애니메이션
     else:
-        row = ROW_IDLE_RIGHT
+        row = ROW_IDLE_RIGHT if face_dir > 0 else ROW_IDLE_LEFT  # 마지막으로 바라본 방향의 IDLE
     character.clip_draw(frame * CELL, row, CELL, CELL, x, y)
     update_canvas()
 
