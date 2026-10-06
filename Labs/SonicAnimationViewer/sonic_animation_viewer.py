@@ -126,6 +126,7 @@ MOTIONS = [
 ]
 
 LOOP_REPEAT = 5  # 동작별 반복 횟수
+PAUSE_TIME = 1   # 반복이 끝난 뒤 정지 시간(초)
 
 for name, frames, frame_delay in MOTIONS:
     base_y = calc_base_y(frames)
@@ -135,5 +136,6 @@ for name, frames, frame_delay in MOTIONS:
             draw_frame(frames, index, 400, base_y)
             update_canvas()
             delay(frame_delay)
+    delay(PAUSE_TIME)
 
 close_canvas()
