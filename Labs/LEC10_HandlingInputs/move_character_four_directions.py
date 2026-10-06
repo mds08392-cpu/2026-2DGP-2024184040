@@ -64,6 +64,7 @@ while running:
     if dir_x != 0:
         face_dir = dir_x  # 좌우로 움직일 때만 바라보는 방향이 바뀐다
     x += dir_x * SPEED
+    y += dir_y * SPEED
     frame = (frame + 1) % FRAME_COUNT
     delay(FRAME_DELAY)
 
