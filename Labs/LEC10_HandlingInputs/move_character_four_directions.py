@@ -19,6 +19,7 @@ running = True
 x, y = 640, 512  # 캐릭터 위치
 frame = 0
 dir_x, dir_y = 0, 0  # 방향키로 정해지는 이동 방향 (-1, 0, 1)
+face_dir = 1  # 바라보는 방향 (1: 오른쪽, -1: 왼쪽)
 
 
 def handle_events():
@@ -53,13 +54,15 @@ while running:
     clear_canvas()
     background.draw(640, 512)
     if dir_x != 0 or dir_y != 0:
-        row = ROW_RUN_RIGHT  # 이동 중에는 이동 애니메이션
+        row = ROW_RUN_RIGHT if face_dir > 0 else ROW_RUN_LEFT  # 이동 중에는 이동 애니메이션
     else:
         row = ROW_IDLE_RIGHT
     character.clip_draw(frame * CELL, row, CELL, CELL, x, y)
     update_canvas()
 
     handle_events()
+    if dir_x != 0:
+        face_dir = dir_x  # 좌우로 움직일 때만 바라보는 방향이 바뀐다
     x += dir_x * SPEED
     frame = (frame + 1) % FRAME_COUNT
     delay(FRAME_DELAY)
