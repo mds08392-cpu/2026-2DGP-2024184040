@@ -16,9 +16,12 @@ def handle_events():
             running = False
 
 
-clear_canvas()
-background.draw(640, 512)
-update_canvas()
-delay(2)
+while running:
+    clear_canvas()
+    background.draw(640, 512)
+    update_canvas()
+
+    handle_events()
+    delay(0.05)
 
 close_canvas()
