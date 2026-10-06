@@ -132,7 +132,7 @@ motion_index = 0
 frame = 0
 loop_count = 0
 running = True
-while running and motion_index < len(MOTIONS):
+while running:
     name, frames, frame_delay = MOTIONS[motion_index]
 
     clear_canvas()
@@ -145,7 +145,7 @@ while running and motion_index < len(MOTIONS):
         if loop_count == LOOP_REPEAT:
             loop_count = 0
             delay(PAUSE_TIME)
-            motion_index += 1  # 다음 동작으로 전환
+            motion_index = (motion_index + 1) % len(MOTIONS)  # 마지막 뒤에는 처음으로
     delay(frame_delay)
 
 close_canvas()
