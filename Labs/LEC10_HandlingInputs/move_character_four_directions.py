@@ -52,7 +52,11 @@ def handle_events():
 while running:
     clear_canvas()
     background.draw(640, 512)
-    character.clip_draw(frame * CELL, ROW_IDLE_RIGHT, CELL, CELL, x, y)
+    if dir_x != 0 or dir_y != 0:
+        row = ROW_RUN_RIGHT  # 이동 중에는 이동 애니메이션
+    else:
+        row = ROW_IDLE_RIGHT
+    character.clip_draw(frame * CELL, row, CELL, CELL, x, y)
     update_canvas()
 
     handle_events()
