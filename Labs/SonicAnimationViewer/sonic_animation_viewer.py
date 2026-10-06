@@ -11,10 +11,13 @@ IDLE_FRAMES = [
     (240, 448, 29, 38), (270, 448, 24, 32), (302, 448, 29, 26),
 ]
 
-clear_canvas()
-x, y, w, h = IDLE_FRAMES[0]
-sheet.clip_draw(x, y, w, h, 400, 300)
-update_canvas()
-delay(1)
+frame = 0
+for _ in range(33):
+    clear_canvas()
+    x, y, w, h = IDLE_FRAMES[frame]
+    sheet.clip_draw(x, y, w, h, 400, 300)
+    update_canvas()
+    frame = (frame + 1) % len(IDLE_FRAMES)
+    delay(0.1)
 
 close_canvas()
