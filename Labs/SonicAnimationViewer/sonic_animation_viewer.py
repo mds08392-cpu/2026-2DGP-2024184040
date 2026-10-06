@@ -84,6 +84,12 @@ TURN_FRAMES = [
 ]
 
 
+# 동작 9: 피격 (2프레임)
+HURT_FRAMES = [
+    (184, 156, 40, 28), (232, 157, 39, 27),
+]
+
+
 # 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
 MOTIONS = [
     ('idle', IDLE_FRAMES, 0.1),
@@ -94,6 +100,7 @@ MOTIONS = [
     ('peel', PEEL_FRAMES, 0.08),
     ('swirl', SWIRL_FRAMES, 0.08),
     ('turn', TURN_FRAMES, 0.12),
+    ('hurt', HURT_FRAMES, 0.15),
 ]
 
 for name, frames, frame_delay in MOTIONS:
