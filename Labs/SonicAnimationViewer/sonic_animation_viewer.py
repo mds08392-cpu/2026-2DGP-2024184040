@@ -97,6 +97,12 @@ RUN2_FRAMES = [
 ]
 
 
+# 동작 11: 환호 (2프레임)
+CHEER_FRAMES = [
+    (6, 56, 34, 40), (49, 56, 34, 43),
+]
+
+
 # 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
 MOTIONS = [
     ('idle', IDLE_FRAMES, 0.1),
@@ -109,6 +115,7 @@ MOTIONS = [
     ('turn', TURN_FRAMES, 0.12),
     ('hurt', HURT_FRAMES, 0.15),
     ('run2', RUN2_FRAMES, 0.08),
+    ('cheer', CHEER_FRAMES, 0.2),
 ]
 
 for name, frames, frame_delay in MOTIONS:
