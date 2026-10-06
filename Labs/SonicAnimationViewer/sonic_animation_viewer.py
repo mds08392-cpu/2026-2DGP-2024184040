@@ -11,6 +11,10 @@ IDLE_FRAMES = [
     (240, 448, 29, 38), (270, 448, 24, 32), (302, 448, 29, 26),
 ]
 
+clear_canvas()
+x, y, w, h = IDLE_FRAMES[0]
+sheet.clip_draw(x, y, w, h, 400, 300)
+update_canvas()
 delay(1)
 
 close_canvas()
