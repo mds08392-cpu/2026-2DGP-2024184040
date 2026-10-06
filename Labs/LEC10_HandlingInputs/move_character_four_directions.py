@@ -17,7 +17,9 @@ ROW_RUN_LEFT = 0
 FRAME_DELAY = 0.05  # 프레임 간격(초)
 SPEED = 10  # 한 프레임당 이동 거리(픽셀)
 HALF = CELL // 2  # 캐릭터 반 크기 (경계 계산용)
-TOP_MARGIN = 20  # 머리가 위쪽 경계 밖으로 나가지 않도록 위쪽에 더 두는 여유
+# 화면 높이(약 914)보다 캔버스(1024)가 커서 창의 위아래가 잘리므로 보이는 영역 안으로 제한한다
+TOP_MARGIN = 80
+BOTTOM_MARGIN = 100
 
 running = True
 x, y = CANVAS_W // 2, CANVAS_H // 2  # 캐릭터 위치 (화면 중앙에서 시작)
@@ -70,7 +72,7 @@ while running:
     x += dir_x * SPEED
     y += dir_y * SPEED
     x = max(HALF, min(x, CANVAS_W - HALF))  # 좌우 경계에서 멈춤
-    y = max(HALF, min(y, CANVAS_H - HALF - TOP_MARGIN))  # 상하 경계에서 멈춤
+    y = max(HALF + BOTTOM_MARGIN, min(y, CANVAS_H - HALF - TOP_MARGIN))  # 상하 경계에서 멈춤
     frame = (frame + 1) % FRAME_COUNT
     delay(FRAME_DELAY)
 
