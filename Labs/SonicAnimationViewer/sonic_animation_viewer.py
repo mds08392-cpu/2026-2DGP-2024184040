@@ -63,6 +63,13 @@ SQUASH_FRAMES = [
 ]
 
 
+# 동작 6: 붉은 잔상 달리기 시작 (6프레임)
+PEEL_FRAMES = [
+    (1, 251, 29, 35), (36, 251, 30, 35), (74, 251, 31, 35), (111, 251, 31, 36),
+    (149, 251, 30, 35), (186, 251, 31, 36),
+]
+
+
 # 동작 목록: (이름, 프레임 목록, 프레임 간격(초))
 MOTIONS = [
     ('idle', IDLE_FRAMES, 0.1),
@@ -70,6 +77,7 @@ MOTIONS = [
     ('dash', DASH_FRAMES, 0.1),
     ('spin', SPIN_FRAMES, 0.06),
     ('squash', SQUASH_FRAMES, 0.08),
+    ('peel', PEEL_FRAMES, 0.08),
 ]
 
 for name, frames, frame_delay in MOTIONS:
