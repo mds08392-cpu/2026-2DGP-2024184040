@@ -1,6 +1,8 @@
 from pico2d import *
 
-open_canvas(1280, 1024)
+CANVAS_W, CANVAS_H = 1280, 1024
+
+open_canvas(CANVAS_W, CANVAS_H)
 
 background = load_image('TUK_GROUND.png')
 character = load_image('animation_sheet.png')
@@ -14,10 +16,10 @@ ROW_RUN_RIGHT = 100
 ROW_RUN_LEFT = 0
 FRAME_DELAY = 0.05  # 프레임 간격(초)
 SPEED = 10  # 한 프레임당 이동 거리(픽셀)
-CANVAS_W, CANVAS_H = 1280, 1024
+HALF = CELL // 2  # 캐릭터 반 크기 (경계 계산용)
 
 running = True
-x, y = 640, 512  # 캐릭터 위치
+x, y = CANVAS_W // 2, CANVAS_H // 2  # 캐릭터 위치 (화면 중앙에서 시작)
 frame = 0
 dir_x, dir_y = 0, 0  # 방향키로 정해지는 이동 방향 (-1, 0, 1)
 face_dir = 1  # 바라보는 방향 (1: 오른쪽, -1: 왼쪽)
@@ -53,7 +55,7 @@ def handle_events():
 
 while running:
     clear_canvas()
-    background.draw(640, 512)
+    background.draw(CANVAS_W // 2, CANVAS_H // 2)
     if dir_x != 0 or dir_y != 0:
         row = ROW_RUN_RIGHT if face_dir > 0 else ROW_RUN_LEFT  # 이동 중에는 이동 애니메이션
     else:
@@ -66,8 +68,8 @@ while running:
         face_dir = dir_x  # 좌우로 움직일 때만 바라보는 방향이 바뀐다
     x += dir_x * SPEED
     y += dir_y * SPEED
-    x = max(CELL // 2, min(x, CANVAS_W - CELL // 2))  # 좌우 경계에서 멈춤
-    y = max(CELL // 2, min(y, CANVAS_H - CELL // 2))  # 상하 경계에서 멈춤
+    x = max(HALF, min(x, CANVAS_W - HALF))  # 좌우 경계에서 멈춤
+    y = max(HALF, min(y, CANVAS_H - HALF))  # 상하 경계에서 멈춤
     frame = (frame + 1) % FRAME_COUNT
     delay(FRAME_DELAY)
 
