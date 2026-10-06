@@ -125,12 +125,15 @@ MOTIONS = [
     ('wait', WAIT_FRAMES, 0.25),
 ]
 
+LOOP_REPEAT = 5  # 동작별 반복 횟수
+
 for name, frames, frame_delay in MOTIONS:
     base_y = calc_base_y(frames)
-    for index in range(len(frames)):
-        clear_canvas()
-        draw_frame(frames, index, 400, base_y)
-        update_canvas()
-        delay(frame_delay)
+    for loop in range(LOOP_REPEAT):
+        for index in range(len(frames)):
+            clear_canvas()
+            draw_frame(frames, index, 400, base_y)
+            update_canvas()
+            delay(frame_delay)
 
 close_canvas()
