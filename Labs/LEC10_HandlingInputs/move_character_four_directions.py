@@ -22,7 +22,7 @@ TOP_MARGIN = 80
 BOTTOM_MARGIN = 100
 
 running = True
-x, y = CANVAS_W // 2, CANVAS_H // 2  # 캐릭터 위치 (화면 중앙에서 시작)
+x, y = CANVAS_W // 2, CANVAS_H // 2  # 캐릭터 위치 (퓟화면 중앙에서 시작)
 frame = 0
 dir_x, dir_y = 0, 0  # 방향키로 정해지는 이동 방향 (-1, 0, 1)
 face_dir = 1  # 바라보는 방향 (1: 오른쪽, -1: 왼쪽)
