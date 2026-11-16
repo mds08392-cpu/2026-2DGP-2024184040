@@ -5,10 +5,13 @@ from sdl2 import (SDL_KEYDOWN, SDL_KEYUP, SDLK_LEFT, SDLK_RIGHT,
                   SDLK_SPACE)
 from transitions import Machine
 
+import game_world
+from ball import Ball
+
 
 class Boy:
     def __init__(self):
-        self.x, self.y = 400, 90
+        self.x, self.y = 400, 30
         self.frame = 0
         self.image = load_image('animation_sheet.png')
         self.idle_started_at = get_time()
@@ -18,7 +21,7 @@ class Boy:
 
         self.machine = Machine(
             model=self,
-            states=['IDLE', 'SLEEP', 'RUN'],
+            states=['IDLE', 'SLEEP', 'RUN', 'SHOOT'],
             transitions=[
                 {'trigger': 'fall_asleep',
                  'source': 'IDLE', 'dest': 'SLEEP'},
@@ -28,6 +31,12 @@ class Boy:
                  'source': ['IDLE', 'SLEEP'], 'dest': 'RUN'},
                 {'trigger': 'stop_run',
                  'source': 'RUN', 'dest': 'IDLE'},
+                {'trigger': 'shoot',
+                 'source': ['IDLE', 'RUN'], 'dest': 'SHOOT'},
+                {'trigger': 'end_shoot_to_idle',
+                 'source': 'SHOOT', 'dest': 'IDLE'},
+                {'trigger': 'end_shoot_to_run',
+                 'source': 'SHOOT', 'dest': 'RUN'},
             ],
             initial='IDLE',
             auto_transitions=False,
@@ -43,11 +52,21 @@ class Boy:
     def on_enter_RUN(self):
         self.frame = 0
 
+    def on_enter_SHOOT(self):
+        self.frame = 0
+        self.shoot_started_at = get_time()
+        direction = '오른쪽' if self.face_dir == 1 else '왼쪽'
+        print(f'[TEST] SHOOT 상태 진입! 방향: {direction}')
+        ball = Ball(self.x + self.face_dir * 40, self.y,
+                    self.face_dir, 10)
+        game_world.add_object(ball,1)
+
     def handle_event(self, event):
-        if (event.type == SDL_KEYDOWN and
-                event.key == SDLK_SPACE and
-                self.state == 'SLEEP'):
-            self.wake_up()
+        if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            if self.state == 'SLEEP':
+                self.wake_up()
+            elif self.state in ('IDLE', 'RUN'):
+                self.shoot()
             return
 
         if (event.type not in (SDL_KEYDOWN, SDL_KEYUP) or
@@ -70,6 +89,13 @@ class Boy:
         elif self.state == 'RUN':
             self.dir = 0
             self.stop_run()
+        elif self.state == 'SHOOT':
+            self.dir = 0
+
+    def move(self):
+        self.frame = (self.frame + 1) % 8
+        self.x += self.dir * 5
+        self.x = max(25, min(get_canvas_width() - 25, self.x))
 
     def update(self):
         if self.state == 'IDLE':
@@ -77,10 +103,23 @@ class Boy:
                 self.fall_asleep()
             else:
                 self.frame = (self.frame + 1) % 8
+        elif self.state == 'SHOOT':
+            if self.dir != 0:
+                self.move()
+            if get_time() - self.shoot_started_at >= 0.3:
+                held = (int(SDLK_RIGHT in self.pressed_keys) -
+                        int(SDLK_LEFT in self.pressed_keys))
+                print('[TEST] SHOOT 종료 -> ' +
+                      ('RUN' if held != 0 else 'IDLE'))
+                if held != 0:
+                    self.dir = held
+                    self.face_dir = held
+                    self.end_shoot_to_run()
+                else:
+                    self.dir = 0
+                    self.end_shoot_to_idle()
         elif self.state == 'RUN':
-            self.frame = (self.frame + 1) % 8
-            self.x += self.dir * 5
-            self.x = max(25, min(get_canvas_width() - 25, self.x))
+            self.move()
 
     def draw(self):
         if self.state == 'SLEEP':
@@ -90,7 +129,7 @@ class Boy:
                 self.frame * 100, 300, 100, 100,
                 angle, flip, self.x, self.y - 30, 100, 100
             )
-        elif self.state == 'RUN':
+        elif self.state == 'RUN' or (self.state == 'SHOOT' and self.dir != 0):
             row = 100 if self.face_dir == 1 else 0
             self.image.clip_draw(self.frame * 100, row, 100, 100,
                                  self.x, self.y)

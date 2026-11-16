@@ -10,6 +10,16 @@ from ball import Ball
 
 import game_framework
 
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+STRIDE_LENGTH_M = 2 #보폭 1pixel당 30cm, 80cm 보폭
+RUN_FRAMES_PER_STRIDE = 5
+
+RUN_FRAMES_PER_SECOND = RUN_SPEED_MPS / STRIDE_LENGTH_M * RUN_FRAMES_PER_STRIDE
 
 
 
@@ -27,7 +37,7 @@ class Idle:
 
     def draw(self, boy):
         row = 300 if boy.face_dir == 1 else 200
-        boy.image.clip_draw(boy.frame * 100, row, 100, 100, boy.x, boy.y)
+        boy.image.clip_draw(int(boy.frame) * 100, row, 100, 100, boy.x, boy.y)
 
     def space(self, boy):
         boy.fire_ball()
@@ -63,13 +73,13 @@ class Run:
         boy.frame = 0
 
     def do(self, boy):
-        boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 5
+        boy.frame = (boy.frame + RUN_FRAMES_PER_SECOND * game_framework.frame_time) % 8
+        boy.x += boy.dir * RUN_SPEED_PPS * game_framework.frame_time
         boy.x = max(25, min(get_canvas_width() - 25, boy.x))
 
     def draw(self, boy):
         row = 100 if boy.face_dir == 1 else 0
-        boy.image.clip_draw(boy.frame * 100, row, 100, 100, boy.x, boy.y)
+        boy.image.clip_draw(int(boy.frame) * 100, row, 100, 100, boy.x, boy.y)
 
     def space(self, boy):
         boy.fire_ball()
@@ -80,6 +90,7 @@ class Run:
 
 class Boy:
     def __init__(self):
+        self.font = load_font('ENCR10B.TTF', 16)
         self.x, self.y = 400, 90
         self.frame = 0
         self.image = load_image('animation_sheet.png')
@@ -159,3 +170,4 @@ class Boy:
 
     def draw(self):
         self.states[self.state].draw(self)
+        self.font.draw(self.x - 60, self.y + 50, f'(Time: {get_time():.2f})', (255, 255, 0))
